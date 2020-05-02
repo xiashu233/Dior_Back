@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dior.dior.mapper.Catalog2Mapper">
+
+    <select id="getAllCatalog2ByCatalog3" resultType="com.dior.dior.bean.PmsBaseCatalog2">
+
+        SELECT
+            *
+        FROM
+            pms_base_catalog2
+        WHERE
+            catalog1_id = (
+                SELECT
+                    catalog1_id
+                FROM
+                    pms_base_catalog2
+                WHERE
+                    id = (
+                        SELECT
+                            catalog2_id
+                        FROM
+                            pms_base_catalog3
+                        WHERE
+                            id = #{catalog3Id}
+                    )
+            )
+
+    </select>
+    <select id="selectAllProcByCatalog2" resultType="com.dior.dior.bean.PmsProductInfo">
+        SELECT
+            *
+        FROM
+            pms_product_info
+        WHERE
+            catalog3_id IN (
+                SELECT
+                    id
+                FROM
+                    pms_base_catalog3
+                WHERE
+                    catalog2_id = #{catalog2Id}
+            )
+    </select>
+    <select id="selectAllCatalog2ByCatalog1" resultType="com.dior.dior.bean.PmsBaseCatalog2">
+        SELECT
+        *
+        FROM
+        pms_base_catalog2
+        WHERE
+        catalog1_id = #{id}
+    </select>
+</mapper>
